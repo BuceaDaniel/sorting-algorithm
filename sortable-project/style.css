@@ -1,0 +1,53 @@
+body{
+    overflow:hidden;
+    height: 100vh;
+    width: 100%;
+    margin: 0;
+}
+
+.top{
+    height: 10%;
+    background-color: aliceblue;
+}
+input[type="range"]{
+    position: relative;
+}
+input[type="range"]::after{
+    content: '50';
+    position :absolute;
+    top:15px;
+    right:0;
+}
+
+input[type="range"]::before{
+    content: '1';
+    position :absolute;
+    top:15px;
+    left:5px;
+}
+
+.sort-container{
+    background-color: antiquewhite;
+    height: 90%;
+}
+
+.area{
+    width: 95%;
+    margin: 0 auto;
+    position: relative;
+    height: 100%;
+}
+
+.bar{
+    position: absolute;
+    bottom: 0;
+    width: 20px;
+    height: 80%;
+    background-color: cornflowerblue;
+}
+.span-style{
+    color:#eee;
+    text-align: center;
+    margin-top: -10px;
+}
+
