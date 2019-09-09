@@ -8,19 +8,51 @@ body{
 .top{
     height: 10%;
     background-color: aliceblue;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 20px;
 }
+
+.left{
+    padding: 0 0 0 100px;
+}
+
+.left div{
+    margin-top: 20px;
+    float: left;
+    text-align: center;
+}
+
+.left div label{
+    padding: 0 10px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: rgb(196, 196, 196);
+}
+
+.left #generate{
+    float: left;
+    clear: left;
+    margin-top: 20px;
+}
+
+.right{
+
+}
+
 input[type="range"]{
     position: relative;
+    -webkit-appearance: none;
 }
 input[type="range"]::after{
-    content: '50';
+    content: '100';
     position :absolute;
     top:15px;
     right:0;
 }
 
 input[type="range"]::before{
-    content: '1';
+    content: '5';
     position :absolute;
     top:15px;
     left:5px;
@@ -44,10 +76,20 @@ input[type="range"]::before{
     width: 20px;
     height: 80%;
     background-color: cornflowerblue;
+    text-align: center;
 }
 .span-style{
     color:#eee;
-    text-align: center;
-    margin-top: -10px;
+    font-size: 12px;
+    font-weight: 900;
+    width: fit-content;
+}
+
+.red{
+    background-color: darkred;
+}
+
+.green{
+    background-color: darkgreen!important;
 }
 
