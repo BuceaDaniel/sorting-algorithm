@@ -78,14 +78,18 @@ var bubbleSortGenerator = function* () {
     var temp;
     var array = randomValues;
     var array_length = array.length;
+    var x=0;
     for (var i = 0; i < array_length; i++) {
         for (j = 0; j < array_length - i - 1; j++) {
             if (array[j] > array[j + 1]) {
                 temp = array[j];
                 array[j] = array[j + 1];
                 array[j + 1] = temp;
+                x=1;
             }
-            yield { index: j }
+            console.log(x);
+            yield { index: j,change:x };
+            x=0;
         }
     }
 }
@@ -105,11 +109,20 @@ var drawOnHtml = function () {
 }
 
 var colourTheSelected = function (index1, index2, color) {
-    // TODO
+    $(".bar:nth-of-type("+index1+")").css("background-color", color);
+    $(".bar:nth-of-type("+index2+")").css("background-color", color);
+
 }
 
 var changeHeights = function (index1, index2) {
     // TODO
+    var temp = $(".bar:nth-of-type("+index1+")");
+    console.log($(".bar:nth-of-type("+index1+")"))
+    console.log($(".bar:nth-of-type("+index2+")"))
+    // $(".bar:nth-of-type("+index1+")").css("left", $(".bar:nth-of-type("+index2+")").css('left'));
+    // $(".bar:nth-of-type("+index2+")").css("left", temp);
+    $(".bar:nth-of-type("+index1+")") = $(".bar:nth-of-type("+index2+")");
+    $(".bar:nth-of-type("+index2+")") = temp;
 }
 
 
@@ -148,15 +161,27 @@ $(document).ready(function () {
                 // }, intervalTimer); break;
                 case 'bubble': var bubbleSortGen = bubbleSortGenerator();
                     setInterval(function () {
+                        var generatorValue= bubbleSortGen.next(randomValues).value;
+                        var index = generatorValue.index;
+                        var change= generatorValue.change;
+                        colourTheSelected(index+1,index+2,"darkgreen");
                         setTimeout(function () {
-                            bubbleSortGen.next(randomValues).value;
-                            console.log("2", randomValues);
-                            setTimeout(function () {
-                                bubbleSortGen.next(randomValues).value;
-                                console.log("3", randomValues);
-                            }, intervalTimer / 3);
-                        }, intervalTimer / 3);
-                    }, intervalTimer);
+                            if(change == 1){
+                                colourTheSelected(index+1,index+2,"darkred");
+                                changeHeights(index+1,index+2);
+                                console.log(randomValues);
+                                setTimeout(function () {
+                                    colourTheSelected(index+1,index+2,"cornflowerblue");
+                                }, intervalTimer / 3);
+                            }
+                            else{
+                                setTimeout(function () {
+                                    colourTheSelected(index+1,index+2,"cornflowerblue");
+                                }, intervalTimer / 2);
+                            }
+                            
+                        }, intervalTimer / 4);
+                    }, 2*intervalTimer);
                     break;
                 default: alert("Not done yet! Please wait."); break;
             }
