@@ -2,8 +2,8 @@ const barHTML = "<div class='bar'></div>";
 const maxHeightPerc = 80;
 const spaceBtwBars = 1;
 const maxValueOfGenerateNb = 250;
-const MAX_INTERVAL = 1000;
-const MIN_INTERVAL = 10;
+const MAX_INTERVAL = 2000;
+const MIN_INTERVAL = 50;
 
 
 var randomValues = [];
@@ -14,12 +14,15 @@ var nbOfBars = 0;
 var i = 0;
 var j = 0;
 var intervalTimer = 250;
+var barsArray = [];
 
 
 var generateRandomNumbers = function (amount) {
     var array = [];
-    for (var i = 0; i < amount; i++)
+    for (var i = 0; i < amount; i++) {
+        barsArray[i] = i + 1;
         array[i] = Math.ceil(Math.random() * maxValueOfGenerateNb);
+    }
     return array;
 }
 
@@ -34,65 +37,128 @@ var clean = function () {
     $(".bar").remove();
 }
 
-var bubbleSort = function (array) {
-    var array_length = array.length;
-    var temp;
-    for (var i = 0; i < array_length; i++) {
-        for (j = 0; j < array_length - i - 1; j++) {
-            if (array[j] > array[j + 1]) {
-                temp = array[j];
-                array[j] = array[j + 1];
-                array[j + 1] = temp;
-                drawOnHtml();
-            }
-        }
-    }
-    return array;
-}
 
-var bubbleSortInterval = function (array, i, j) {
-    var array_length = array.length;
-    var temp;
-    colourTheSelected(j + 1, j + 2, "green");
-    if (array[j] > array[j + 1]) {
-        temp = array[j];
-        array[j] = array[j + 1];
-        array[j + 1] = temp;
-        colourTheSelected(j + 1, j + 2, "red");
-        changeHeights(j + 1, j + 2);
-        drawOnHtml();
-    }
-    if (j >= array_length - i - 1) {
-        i++;
-        j = -1;
-    }
-    j++;
-    if (i < array_length)
-        return { arr: array, i: i, j: j };
-    else
-        return false;
+// ====================> Delete later
 
-}
+// var bubbleSort = function (array) {
+//     var array_length = array.length;
+//     var temp;
+//     for (var i = 0; i < array_length; i++) {
+//         for (j = 0; j < array_length - i - 1; j++) {
+//             if (array[j] > array[j + 1]) {
+//                 temp = array[j];
+//                 array[j] = array[j + 1];
+//                 array[j + 1] = temp;
+//                 drawOnHtml();
+//             }
+//         }
+//     }
+//     return array;
+// }
 
+// var bubbleSortInterval = function (array, i, j) {
+//     var array_length = array.length;
+//     var temp;
+//     colourTheSelected(j + 1, j + 2, "green");
+//     if (array[j] > array[j + 1]) {
+//         temp = array[j];
+//         array[j] = array[j + 1];
+//         array[j + 1] = temp;
+//         colourTheSelected(j + 1, j + 2, "red");
+//         changeHeights(j + 1, j + 2);
+//         drawOnHtml();
+//     }
+//     if (j >= array_length - i - 1) {
+//         i++;
+//         j = -1;
+//     }
+//     j++;
+//     if (i < array_length)
+//         return { arr: array, i: i, j: j };
+//     else
+//         return false;
+
+// }
+
+
+// End Delete
+
+
+// SORT ALGORITHMS
+
+// ===== Bubble Sort ======
 var bubbleSortGenerator = function* () {
     var temp;
     var array = randomValues;
     var array_length = array.length;
-    var x=0;
+    var x = 0;
+    var last = 0;
     for (var i = 0; i < array_length; i++) {
-        for (j = 0; j < array_length - i - 1; j++) {
+        last = false;
+        for (var j = 0; j < array_length - i - 1; j++) {
             if (array[j] > array[j + 1]) {
                 temp = array[j];
                 array[j] = array[j + 1];
                 array[j + 1] = temp;
-                x=1;
+                x = 1;
             }
-            console.log(x);
-            yield { index: j,change:x };
-            x=0;
+            if (j == array_length - i - 2) last = true;
+            // console.log(j, array_length - i - 1)
+            yield { index: j, change: x, last: last };
+            x = 0;
         }
     }
 }
+
+// ===== End of Bubble Sort =====
+
+// ===== Heap Sort =====
+
+function heap_root(input, i) {
+    var left = 2 * i + 1;
+    var right = 2 * i + 2;
+    var max = i;
+
+    if (left < array_length && input[left] > input[max]) {
+        max = left;
+    }
+
+    if (right < array_length && input[right] > input[max]) {
+        max = right;
+    }
+
+    if (max != i) {
+        swap(input, i, max);
+        heap_root(input, max);
+    }
+}
+
+function swap(input, index_A, index_B) {
+    var temp = input[index_A];
+    input[index_A] = input[index_B];
+    input[index_B] = temp;
+    console.log(randomValues);
+}
+
+function heapSort(input) {
+
+    array_length = input.length;
+
+    for (var i = Math.floor(array_length / 2); i >= 0; i -= 1) {
+        heap_root(input, i);
+    }
+
+    for (i = input.length - 1; i > 0; i--) {
+        swap(input, 0, i);
+        array_length--;
+        heap_root(input, 0);
+    }
+}
+
+// ==== End of Heap Sort ====
+
+
+//END OF SORT ALGORITHMS
 
 
 var drawOnHtml = function () {
@@ -109,20 +175,18 @@ var drawOnHtml = function () {
 }
 
 var colourTheSelected = function (index1, index2, color) {
-    $(".bar:nth-of-type("+index1+")").css("background-color", color);
-    $(".bar:nth-of-type("+index2+")").css("background-color", color);
+    if (index1 != null) $(".bar:nth-of-type(" + index1 + ")").css("background-color", color);
+    if (index2 != null) $(".bar:nth-of-type(" + index2 + ")").css("background-color", color);
 
 }
 
 var changeHeights = function (index1, index2) {
-    // TODO
-    var temp = $(".bar:nth-of-type("+index1+")");
-    console.log($(".bar:nth-of-type("+index1+")"))
-    console.log($(".bar:nth-of-type("+index2+")"))
-    // $(".bar:nth-of-type("+index1+")").css("left", $(".bar:nth-of-type("+index2+")").css('left'));
-    // $(".bar:nth-of-type("+index2+")").css("left", temp);
-    $(".bar:nth-of-type("+index1+")") = $(".bar:nth-of-type("+index2+")");
-    $(".bar:nth-of-type("+index2+")") = temp;
+    var temp = $(".bar:nth-of-type(" + barsArray[index1] + ")").css('left');
+    var temp2 = barsArray[index1];
+    $(".bar:nth-of-type(" + barsArray[index1] + ")").css("left", $(".bar:nth-of-type(" + barsArray[index2] + ")").css('left'));
+    $(".bar:nth-of-type(" + barsArray[index2] + ")").css("left", temp);
+    barsArray[index1] = barsArray[index2];
+    barsArray[index2] = temp2;
 }
 
 
@@ -147,42 +211,43 @@ $(document).ready(function () {
         $(element).change(function () {
             var interval;
             switch (element.id) {
-                // case 'bubble': interval = setInterval(function () {
-                //     var resp = bubbleSortInterval(randomValues, i, j);
-                //     if (resp != false) {
-                //         randomValues = resp.arr
-                //         i = resp.i
-                //         j = resp.j
-                //     }
-                //     else {
-                //         clearInterval(interval);
-                //     }
-
-                // }, intervalTimer); break;
                 case 'bubble': var bubbleSortGen = bubbleSortGenerator();
-                    setInterval(function () {
-                        var generatorValue= bubbleSortGen.next(randomValues).value;
-                        var index = generatorValue.index;
-                        var change= generatorValue.change;
-                        colourTheSelected(index+1,index+2,"darkgreen");
-                        setTimeout(function () {
-                            if(change == 1){
-                                colourTheSelected(index+1,index+2,"darkred");
-                                changeHeights(index+1,index+2);
-                                console.log(randomValues);
+                    var bubbleInterval = setInterval(function () {
+                        var generatorValue = bubbleSortGen.next(randomValues).value;
+                        if (!generatorValue) {
+                            clearInterval(bubbleInterval);
+                            $(".bar").css("background-color", "purple");
+                        }
+                        else {
+                            var index = generatorValue.index;
+                            var change = generatorValue.change;
+                            var last = generatorValue.last;
+                            console.log(last);
+                            colourTheSelected(barsArray[index], barsArray[index + 1], "green");
+                            setTimeout(function () {
+                                if (change == 1) {
+                                    colourTheSelected(barsArray[index], barsArray[index + 1], "red");
+                                    changeHeights(index, index + 1);
+                                }
+                                else {
+                                    colourTheSelected(barsArray[index], barsArray[index + 1], "green");
+                                }
                                 setTimeout(function () {
-                                    colourTheSelected(index+1,index+2,"cornflowerblue");
+                                    if (last == true) {
+                                        console.log(last, barsArray[index + 1])
+                                        colourTheSelected(barsArray[index + 1], null, "purple");
+                                        colourTheSelected(barsArray[index], null, "cornflowerblue");
+                                    }
+                                    else {
+                                        colourTheSelected(barsArray[index], barsArray[index + 1], "cornflowerblue");
+
+                                    }
                                 }, intervalTimer / 3);
-                            }
-                            else{
-                                setTimeout(function () {
-                                    colourTheSelected(index+1,index+2,"cornflowerblue");
-                                }, intervalTimer / 2);
-                            }
-                            
-                        }, intervalTimer / 4);
-                    }, 2*intervalTimer);
+                            }, intervalTimer / 3);
+                        }
+                    }, intervalTimer);
                     break;
+                case "heap": heapSort(randomValues); console.log(randomValues); break;
                 default: alert("Not done yet! Please wait."); break;
             }
         })
