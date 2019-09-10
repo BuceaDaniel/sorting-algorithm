@@ -1,11 +1,9 @@
 const barHTML = "<div class='bar'></div>";
-const maxHeightPerc = 80;
-const spaceBtwBars = 1;
 const maxValueOfGenerateNb = 250;
 const MAX_INTERVAL = 2000;
 const MIN_INTERVAL = 50;
 
-
+var spaceBtwBars = 6;
 var randomValues = [];
 var maxValueFromArray = 0;
 var defaultBarWidth = 20;
@@ -168,12 +166,13 @@ var drawOnHtml = function () {
     }
     $(".bar").each(function (index, element) {
         $(element).css("left", index * (defaultBarWidth + spaceBtwBars) + 'px');
-        $(element).css("height", Math.min(5 + randomValues[index] * maxHeightPerc / maxValueFromArray, maxHeightPerc) + '%');
+        $(element).css("height",20 + randomValues[index] * 2.5 + 'px');
         $(element).css("width", defaultBarWidth + 'px');
         $(element).append("<span class='span-style'>" + randomValues[index] + "</span>");
     })
-}
+    if (nbOfBars > 30)  $('.span-style').css("display","none");
 
+}
 var colourTheSelected = function (index1, index2, color) {
     if (index1 != null) $(".bar:nth-of-type(" + index1 + ")").css("background-color", color);
     if (index2 != null) $(".bar:nth-of-type(" + index2 + ")").css("background-color", color);
@@ -191,19 +190,23 @@ var changeHeights = function (index1, index2) {
 
 
 $(document).ready(function () {
-    $('#arr_size').text($("#nb").val());
-
+    nbOfBars = $("#nb").val();
+    $('#arr_size').text(nbOfBars);
+    init(nbOfBars);
+    drawOnHtml();
 
     $("#generate").click(function (event) {
-        nbOfBars = $("#nb").val();
         init(nbOfBars);
         drawOnHtml();
-
     })
 
     $("#nb").change(function () {
-        intervalTimer = 5 * MAX_INTERVAL / $(this).val();
-        $('#arr_size').text($(this).val());
+        nbOfBars = $(this).val();
+        intervalTimer = 5 * MAX_INTERVAL / nbOfBars;
+        spaceBtwBars = nbOfBars < 10 ? 10 : nbOfBars < 30 ? 6 : nbOfBars < 70 ? 4 : 2;
+        $('#arr_size').text(nbOfBars);
+        init(nbOfBars);
+        drawOnHtml();
     })
 
     $("input[type='radio']").each(function (index, element) {

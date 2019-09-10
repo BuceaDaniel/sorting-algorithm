@@ -64,7 +64,7 @@ input[type="range"]::before{
 }
 
 .area{
-    width: 95%;
+    width: 50%;
     margin: 0 auto;
     position: relative;
     height: 100%;
@@ -74,7 +74,6 @@ input[type="range"]::before{
     position: absolute;
     bottom: 0;
     width: 20px;
-    height: 80%;
     background-color: cornflowerblue;
     text-align: center;
 }
