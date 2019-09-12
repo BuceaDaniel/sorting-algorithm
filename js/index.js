@@ -135,7 +135,6 @@ function swap(input, index_A, index_B) {
     var temp = input[index_A];
     input[index_A] = input[index_B];
     input[index_B] = temp;
-    console.log(randomValues);
 }
 
 function heapSort(input) {
@@ -154,6 +153,68 @@ function heapSort(input) {
 }
 
 // ==== End of Heap Sort ====
+
+
+
+// ===== Quick Sort ======
+function* partitionGenerator(items, left, right) {
+    var indexPivot = Math.floor((right + left) / 2)
+    var pivot   = items[indexPivot], //middle element
+        i       = left, //left pointer
+        j       = right; //right pointer
+    while (i <= j) {
+        while (items[i] < pivot) {
+            yield {index:i, val:items[i], pivot:pivot, indexPivot:indexPivot};
+            i++;
+        }
+        while (items[j] > pivot) {
+            yield {index:j, val:items[j], pivot:pivot, indexPivot:indexPivot};
+            j--;
+        }
+        if (i <= j) {
+            var temp = items[i];
+            items[i] = items[j];
+            items[j] = temp;
+            i++;
+            j--;
+        }
+        console.log(items);
+    }
+    // return i;
+}
+
+function quickSort(items, left, right) {
+    var index;
+    var partitionGen = partitionGenerator(items,left,right);
+    console.log(partitionGen.next());
+    index = partitionGen.next().value;
+    console.log(index);
+    // quickSort(items, index, right);
+
+    // if (items.length > 1) {
+    //     // index = partition(items, left, right); //index returned from partition
+    //     if (left < index - 1) { //more elements on the left side of the pivot
+    //         quickSort(items, left, index - 1);
+    //     }
+    //     if (index < right) { //more elements on the right side of the pivot
+    //         quickSort(items, index, right);
+    //     }
+    // }
+    return items;
+}
+
+function* quickSortGenerator(items,left,right){
+        var partitionGen = partitionGenerator(items,left,right);
+        for (var i=0;i<10;i++){
+            var partValue = partitionGen.next();
+            console.log(partValue.value);
+        }
+        
+        yield partValue;
+
+}
+
+// ====== End of Quick Sort ======
 
 
 //END OF SORT ALGORITHMS
@@ -191,6 +252,7 @@ var changeHeights = function (index1, index2) {
 
 $(document).ready(function () {
     nbOfBars = $("#nb").val();
+    nbOfBars = 7;
     $('#arr_size').text(nbOfBars);
     init(nbOfBars);
     drawOnHtml();
@@ -225,7 +287,6 @@ $(document).ready(function () {
                             var index = generatorValue.index;
                             var change = generatorValue.change;
                             var last = generatorValue.last;
-                            console.log(last);
                             colourTheSelected(barsArray[index], barsArray[index + 1], "green");
                             setTimeout(function () {
                                 if (change == 1) {
@@ -237,7 +298,6 @@ $(document).ready(function () {
                                 }
                                 setTimeout(function () {
                                     if (last == true) {
-                                        console.log(last, barsArray[index + 1])
                                         colourTheSelected(barsArray[index + 1], null, "purple");
                                         colourTheSelected(barsArray[index], null, "cornflowerblue");
                                     }
@@ -251,6 +311,9 @@ $(document).ready(function () {
                     }, intervalTimer);
                     break;
                 case "heap": heapSort(randomValues); console.log(randomValues); break;
+                case "quick": var quickSortGen = quickSortGenerator(randomValues,0,randomValues.length-1); 
+                    quickSortGen.next();
+                break;
                 default: alert("Not done yet! Please wait."); break;
             }
         })
