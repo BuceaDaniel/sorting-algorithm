@@ -35,53 +35,6 @@ var clean = function () {
     $(".bar").remove();
 }
 
-
-// ====================> Delete later
-
-// var bubbleSort = function (array) {
-//     var array_length = array.length;
-//     var temp;
-//     for (var i = 0; i < array_length; i++) {
-//         for (j = 0; j < array_length - i - 1; j++) {
-//             if (array[j] > array[j + 1]) {
-//                 temp = array[j];
-//                 array[j] = array[j + 1];
-//                 array[j + 1] = temp;
-//                 drawOnHtml();
-//             }
-//         }
-//     }
-//     return array;
-// }
-
-// var bubbleSortInterval = function (array, i, j) {
-//     var array_length = array.length;
-//     var temp;
-//     colourTheSelected(j + 1, j + 2, "green");
-//     if (array[j] > array[j + 1]) {
-//         temp = array[j];
-//         array[j] = array[j + 1];
-//         array[j + 1] = temp;
-//         colourTheSelected(j + 1, j + 2, "red");
-//         changeHeights(j + 1, j + 2);
-//         drawOnHtml();
-//     }
-//     if (j >= array_length - i - 1) {
-//         i++;
-//         j = -1;
-//     }
-//     j++;
-//     if (i < array_length)
-//         return { arr: array, i: i, j: j };
-//     else
-//         return false;
-
-// }
-
-
-// End Delete
-
-
 // SORT ALGORITHMS
 
 // ===== Bubble Sort ======
